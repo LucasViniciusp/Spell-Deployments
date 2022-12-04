@@ -1,0 +1,11 @@
+apiVersion: v2
+name: glitchtip
+description: Error tracking compatible with Sentry SDK
+
+version: 0.0.1
+
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: ^17.3.11

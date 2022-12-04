@@ -1,0 +1,53 @@
+# Default values for glitchtip.
+image:
+  repository: glitchtip/glitchtip
+  tag: v2.0.7
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+env:
+  normal:
+    ENABLE_SOCIAL_AUTH: true
+    GLITCHTIP_DOMAIN: https://glitchtip.lucasvinicius.site
+  secret:
+    SECRET_KEY: "!!!SECRET!!!"
+    DATABASE_URL: postgres://postgres:postgres@postgres.api:5432/postgres
+
+web:
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+
+  service:
+    type: ClusterIP
+    port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+
+  path: /
+  pathType: ImplementationSpecific
+  hosts:
+    - glitchtip.lucasvinicius.site
+
+  tls: []
+
+worker:
+  enabled: true
+  replicaCount: 1
+
+beat:
+  enabled: true
+
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+   password: redis_passowrd
+  master:
+    persistence:
+      enabled: false
