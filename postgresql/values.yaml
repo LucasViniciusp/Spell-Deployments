@@ -15,6 +15,7 @@ postgres:
 
   persistence:
     enabled: True
+    className: default
     accessMode: ReadWriteMany
     capacity: 5Gi
     volume:

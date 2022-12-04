@@ -21,6 +21,7 @@ metadata:
   labels:
     app: {{ .Chart.Name }}
 spec:
+  storageClassName: {{ .Values.postgres.persistence.className }}
   accessModes:
     - {{ .Values.postgres.persistence.accessMode }}
   resources:
