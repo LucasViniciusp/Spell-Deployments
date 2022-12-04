@@ -1,0 +1,24 @@
+postgres:
+  spec:
+    replicas: 1
+    containerPort: 5432
+
+  auth:
+    username: postgres
+    password: postgres
+    database: social
+
+  image:
+    name: "postgres"
+    tag: "15"
+    imagepullpolicy: "IfNotPresent"
+
+  persistence:
+    enabled: True
+    accessMode: ReadWriteMany
+    capacity: 5Gi
+    volume:
+      name: postgresql
+      path: "/mnt/postgresql/data"
+  service:
+    type: ClusterIP

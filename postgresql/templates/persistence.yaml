@@ -1,0 +1,28 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-pv-volume
+  labels:
+    type: local
+    app: {{ .Chart.Name }}
+spec:
+  storageClassName: {{ .Values.postgres.persistence.className }}
+  capacity:
+    storage: {{ .Values.postgres.persistence.capacity }}
+  accessModes:
+    - {{ .Values.postgres.persistence.accessMode }}
+  hostPath:
+    path: {{ .Values.postgres.persistence.volume.path }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Chart.Name }}-pv-claim
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  accessModes:
+    - {{ .Values.postgres.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.postgres.persistence.capacity }}
