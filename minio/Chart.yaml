@@ -1,0 +1,5 @@
+apiVersion: v2
+name: minio
+description: MinIO(R) is an object storage server
+
+version: 0.0.1

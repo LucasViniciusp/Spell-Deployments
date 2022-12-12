@@ -1,0 +1,84 @@
+image:
+  registry: docker.io
+  repository: bitnami/minio
+  tag: 2022.12.2-debian-11-r0
+  pullPolicy: IfNotPresent
+
+clientImage:
+  registry: docker.io
+  repository: bitnami/minio-client
+  tag: 2022.11.17-debian-11-r4
+auth:
+  rootUser: admin
+  rootPassword: admin
+
+defaultBuckets: "workflows, data"
+terminationGracePeriodSeconds: "5"
+
+deployment:
+  updateStrategy:
+    type: Recreate
+
+containerPorts:
+  api: 9000
+  console: 9001
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+
+service:
+  type: ClusterIP
+  ports:
+    api: 9000
+    console: 9001
+  nodePorts:
+  externalTrafficPolicy: Cluster
+
+ingress:
+  ingressClassName: "nginx"
+  hostname: minio.lucasvinicius.site
+  path: /
+  pathType: ImplementationSpecific
+  servicePort: minio-console
+
+apiIngress:
+  ingressClassName: "nginx"
+  hostname: api-minio.lucasvinicius.site
+  path: /
+  pathType: ImplementationSpecific
+  servicePort: minio-api
+
+persistence:
+  storageClass: "linode-block-storage-retain"
+  mountPath: /data
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+volumePermissions:
+  containerSecurityContext:
+    runAsUser: 0
+
+livenessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+readinessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 5
+startupProbe:
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 60
