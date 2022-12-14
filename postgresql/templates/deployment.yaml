@@ -24,7 +24,7 @@ spec:
             - configMapRef:
                 name: {{ .Release.Name }}-config
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
+            - mountPath: {{ .Values.postgres.persistence.volume.path }}
               name: {{ .Values.postgres.persistence.volume.name }}
       volumes:
         - name: {{ .Values.postgres.persistence.volume.name }}

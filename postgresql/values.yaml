@@ -15,11 +15,11 @@ postgres:
 
   persistence:
     enabled: True
-    className: default
-    accessMode: ReadWriteMany
-    capacity: 5Gi
+    className: linode-block-storage-retain
+    accessMode: ReadWriteOnce
+    capacity: 8Gi
     volume:
       name: postgresql
-      path: "/mnt/postgresql/data"
+      path: "/data/postgres"
   service:
     type: ClusterIP
