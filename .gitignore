@@ -1,3 +1,17 @@
 ### Helm ###
 # Chart dependencies
 **/charts/*.tgz
+
+# Environments
+.python-version
+.env
+.venv
+env/
+venv/
+
+# Dask
+dask-worker-space/
+
+# Editors
+.idea/
+.vscode/
