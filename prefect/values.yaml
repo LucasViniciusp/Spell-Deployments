@@ -1,0 +1,72 @@
+orion:
+  replicaCount: 1
+
+  image:
+    repository: prefecthq/prefect
+    prefectTag: 2.7-python3.9
+    pullPolicy: Always
+    pullSecrets: []
+    debug: false
+
+  ApiConfig:
+    apiUrl: http://workflows.lucasvinicius.site/api
+
+  podSecurityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+    fsGroup: 1001
+
+  containerSecurityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+
+
+agent:
+  replicaCount: 1
+
+  image:
+    repository: lukeinstruct/spell
+    prefectTag: prefect-agent
+    pullPolicy: Always
+    debug: false
+
+  config:
+    workQueues:
+      - default
+    queryInterval: 5
+    prefetchSeconds: 10
+
+  apiConfig: "orion"
+
+  orionApiConfig:
+    apiUrl: http://prefect-service:4200/api
+
+service:
+  type: ClusterIP
+  port: 4200
+  clusterIP: ""
+  nodePort: ""
+
+  externalTrafficPolicy: Cluster
+
+ingress:
+  className: "nginx"
+  host:
+    path: /
+    pathType: ImplementationSpecific
+    hostname: workflows.lucasvinicius.site
+
+postgresql:
+  auth:
+    host: postgres
+    database: postgres
+    username: postgres
+    password: postgres
+    port: 5432
+
+external:
+  league:
+    RIOT_API_URL: https://br1.api.riotgames.com
+    RIOT_API_KEY: "RIOT-API-KEY"

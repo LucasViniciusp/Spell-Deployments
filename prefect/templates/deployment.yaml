@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: prefect-orion
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: orion
+spec:
+  replicas: {{ .Values.orion.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prefect-orion
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: orion
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: prefect-orion
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: orion
+    spec:
+      securityContext: {{- .Values.orion.podSecurityContext | toYaml | nindent 8 }}
+      containers:
+        - name: prefect-orion
+          image: "{{ .Values.orion.image.repository }}:{{ .Values.orion.image.prefectTag }}"
+          imagePullPolicy: {{ .Values.orion.image.pullPolicy }}
+          command: ["prefect", "orion", "start", "--host", "0.0.0.0", "--log-level", "WARNING", "--port", {{ .Values.service.port | quote }}]
+          workingDir: /home/prefect
+          ports:
+            - containerPort: {{ int .Values.service.port }}
+          env:
+            - name: HOME
+              value: /home/prefect
+            - name: PREFECT_DEBUG_MODE
+              value: {{ .Values.orion.image.debug | quote }}
+            - name: PREFECT_API_URL
+              value: {{ .Values.orion.ApiConfig.apiUrl | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-secret
+          volumeMounts:
+            - mountPath: /home/prefect
+              name: scratch
+              subPathExpr: home
+            - mountPath: /tmp
+              name: scratch
+              subPathExpr: tmp
+      volumes:
+        - name: scratch
+          emptyDir: {}
