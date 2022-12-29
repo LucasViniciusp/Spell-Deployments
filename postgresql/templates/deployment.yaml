@@ -26,6 +26,7 @@ spec:
           volumeMounts:
             - mountPath: {{ .Values.postgres.persistence.volume.path }}
               name: {{ .Values.postgres.persistence.volume.name }}
+              subPath: {{ .Values.postgres.persistence.volume.name }}
       volumes:
         - name: {{ .Values.postgres.persistence.volume.name }}
           persistentVolumeClaim:

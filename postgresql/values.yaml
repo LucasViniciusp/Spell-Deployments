@@ -6,7 +6,7 @@ postgres:
   auth:
     username: postgres
     password: postgres
-    database: social
+    database: postgres
 
   image:
     name: "postgres"
@@ -17,9 +17,9 @@ postgres:
     enabled: True
     className: linode-block-storage-retain
     accessMode: ReadWriteOnce
-    capacity: 8Gi
+    capacity: 10Gi
     volume:
       name: postgresql
-      path: "/data/postgres"
+      path: "/var/lib/postgresql/data"
   service:
     type: ClusterIP
