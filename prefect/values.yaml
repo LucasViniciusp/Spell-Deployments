@@ -60,6 +60,8 @@ ingress:
 
 postgresql:
   auth:
+    url: postgresql+asyncpg://postgres:postgres@postgres.api:5432/spell
+    engine: django.db.backends.postgresql
     host: postgres
     database: postgres
     username: postgres

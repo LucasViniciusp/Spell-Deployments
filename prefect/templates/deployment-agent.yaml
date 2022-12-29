@@ -43,6 +43,11 @@ spec:
               value: {{ .Values.external.league.RIOT_API_URL | quote }}
             - name: RIOT_API_KEY
               value: {{ .Values.external.league.RIOT_API_KEY }}
+            - name: PREFECT_AGENT_PROCESS
+              value: "True"
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-secret
           volumeMounts:
             - mountPath: /home/prefect
               name: scratch
